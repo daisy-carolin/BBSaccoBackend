@@ -80,6 +80,8 @@ class LoanStatusSerializer(serializers.ModelSerializer):
         model = LoanStatus
         fields = "__all__"
 
+    
+
 
 class SavingsSerializer(serializers.ModelSerializer):
     class Meta:

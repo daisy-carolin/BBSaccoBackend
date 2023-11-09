@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.shortcuts import render
 from loanmanagement.models import *
 
@@ -6,6 +6,7 @@ from loanmanagement.models import *
 
 from datetime import datetime
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework import permissions
 from rest_framework.response import Response
@@ -66,20 +67,29 @@ class BorrowersView(APIView):
         else:
             return Response(data=serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class BorrowersChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = BorrowersSerializer
+
+    @swagger_auto_schema(responses={200: BorrowersSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        borrowers = get_object_or_404(Borrowers, pk=pk)
+        serializer = BorrowersSerializer(borrowers)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(request_body=BorrowersSerializer)
-    def put(self, request, pk,format=None, *args, **kwargs):
-        borrower = Borrowers.objects.get(pk=pk)
-        serializer = BorrowersSerializer(borrower, data=request.data)
+    def put(self, request, pk, format=None, *args, **kwargs):
+        borrowers = get_object_or_404(Borrowers, pk=pk)
+        serializer = BorrowersSerializer(borrowers, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=BorrowersSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        borrower= Borrowers.objects.get(pk=pk)
-        borrower.delete()
+        borrowers = get_object_or_404(Borrowers, pk=pk)
+        borrowers.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
 
@@ -102,20 +112,29 @@ class CostomFieldView(APIView):
         else:
             return Response(data=serializers.errors, status=status.HTTP_400_BAD_REQUEST)
         
+class CostomFieldChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = CostomFieldSerializer
+
+    @swagger_auto_schema(responses={200: CostomFieldSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        costomField = get_object_or_404(CostomField, pk=pk)
+        serializer = CostomFieldSerializer(costomField)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(request_body=CostomFieldSerializer)
-    def put(self, request, pk,format=None, *args, **kwargs):
-        costom_field = CostomField.objects.get(pk=pk)
-        serializer = CostomFieldSerializer(costom_field, data=request.data)
+    def put(self, request, pk, format=None, *args, **kwargs):
+        costomField = get_object_or_404(CostomField, pk=pk)
+        serializer = CostomFieldSerializer(costomField, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=CostomFieldSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        costom_field = CostomField.objects.get(pk=pk)
-        costom_field.delete()
+        costomField = get_object_or_404(CostomField, pk=pk)
+        costomField.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -138,9 +157,19 @@ class LoansView(APIView):
         else:
             return Response(data=serializers.errors, status=status.HTTP_400_BAD_REQUEST)
         
+class LoansChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = LoansSerializer
+
+    @swagger_auto_schema(responses={200: LoansSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        loans = get_object_or_404(Loans, pk=pk)
+        serializer = LoansSerializer(loans)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(request_body=LoansSerializer)
-    def put(self, request, pk,format=None, *args, **kwargs):
-        loans = Loans.objects.get(pk=pk)
+    def put(self, request, pk, format=None, *args, **kwargs):
+        loans = get_object_or_404(Loans, pk=pk)
         serializer = LoansSerializer(loans, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -148,9 +177,8 @@ class LoansView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=LoansSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        loans = Loans.objects.get(pk=pk)
+        loans = get_object_or_404(Loans, pk=pk)
         loans.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -174,20 +202,29 @@ class LoanApplicationView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+class LoanApplicationChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = LoanApplicationSerializer
+
+    @swagger_auto_schema(responses={200: LoanApplicationSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        loan_applications = get_object_or_404(LoanApplication, pk=pk)
+        serializer = LoanApplicationSerializer(loan_applications)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(request_body=LoanApplicationSerializer)
     def put(self, request, pk, format=None, *args, **kwargs):
-        loan_application = LoanApplication.objects.get(pk=pk)
-        serializer = LoanApplicationSerializer(loan_application, data=request.data)
+        loan_applications = get_object_or_404(LoanApplication, pk=pk)
+        serializer = LoanApplicationSerializer(loan_applications, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=LoanApplicationSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        loan_application = LoanApplication.objects.get(pk=pk)
-        loan_application.delete()
+        loan_applications = get_object_or_404(LoanApplication, pk=pk)
+        loan_applications.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -211,9 +248,19 @@ class LoanCommentView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class LoanCommentChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = LoanCommentSerializer
+
+    @swagger_auto_schema(responses={200: LoanCommentSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        loan_comments = get_object_or_404(LoanComment, pk=pk)
+        serializer = LoanCommentSerializer(loan_comments)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(request_body=LoanCommentSerializer)
     def put(self, request, pk, format=None, *args, **kwargs):
-        loan_comments = LoanComment.objects.get(pk=pk)
+        loan_comments = get_object_or_404(LoanComment, pk=pk)
         serializer = LoanCommentSerializer(loan_comments, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -221,15 +268,18 @@ class LoanCommentView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=LoanCommentSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        loan_comments = LoanComment.objects.get(pk=pk)
+        loan_comments = get_object_or_404(LoanComment, pk=pk)
         loan_comments.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+# class LoanDisbursedByViewset(ModelViewSet):
+#     permission_classes = [permissions.AllowAny]
+#     queryset = LoanDisbursedBy.objects.all()
+#     serializer_class = LoanDisbursedBySerializer
 
-# Views for LoanDisbursedBy
+
 class LoanDisbursedByView(APIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = LoanDisbursedBySerializer
@@ -248,10 +298,20 @@ class LoanDisbursedByView(APIView):
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
+class LoanDisbursedByChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = LoanDisbursedBySerializer
+
+    @swagger_auto_schema(responses={200: LoanDisbursedBySerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        loan_disbursed_by = get_object_or_404(LoanDisbursedBy, pk=pk)
+        serializer = LoanDisbursedBySerializer(loan_disbursed_by)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(request_body=LoanDisbursedBySerializer)
     def put(self, request, pk, format=None, *args, **kwargs):
-        loan_disbursed_by = LoanDisbursedBy.objects.get(pk=pk)
+        loan_disbursed_by = get_object_or_404(LoanDisbursedBy, pk=pk)
         serializer = LoanDisbursedBySerializer(loan_disbursed_by, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -259,9 +319,8 @@ class LoanDisbursedByView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=LoanDisbursedBySerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        loan_disbursed_by = LoanDisbursedBy.objects.get(pk=pk)
+        loan_disbursed_by = get_object_or_404(LoanDisbursedBy, pk=pk)
         loan_disbursed_by.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -286,9 +345,19 @@ class LoanFeesView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class LoanFeesChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = LoanFeesSerializer
+
+    @swagger_auto_schema(responses={200: LoanFeesSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        loan_fees = get_object_or_404(LoanFees, pk=pk)
+        serializer = LoanFeesSerializer(loan_fees)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(request_body=LoanFeesSerializer)
     def put(self, request, pk, format=None, *args, **kwargs):
-        loan_fees = LoanFees.objects.get(pk=pk)
+        loan_fees = get_object_or_404(LoanFees, pk=pk)
         serializer = LoanFeesSerializer(loan_fees, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -296,11 +365,11 @@ class LoanFeesView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=LoanFeesSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        loan_fees = LoanFees.objects.get(pk=pk)
+        loan_fees = get_object_or_404(LoanFees, pk=pk)
         loan_fees.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 
 # Views for LoanFeesMeta
@@ -323,9 +392,19 @@ class LoanFeesMetaView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+class LoanFeesMetaChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = LoanFeesMetaSerializer
+
+    @swagger_auto_schema(responses={200: LoanFeesMetaSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        loan_fees_meta = get_object_or_404(LoanFeesMeta, pk=pk)
+        serializer = LoanFeesMetaSerializer(loan_fees_meta)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(request_body=LoanFeesMetaSerializer)
     def put(self, request, pk, format=None, *args, **kwargs):
-        loan_fees_meta = LoanFeesMeta.objects.get(pk=pk)
+        loan_fees_meta = get_object_or_404(LoanFeesMeta, pk=pk)
         serializer = LoanFeesMetaSerializer(loan_fees_meta, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -333,9 +412,8 @@ class LoanFeesMetaView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=LoanFeesMetaSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        loan_fees_meta = LoanFeesMeta.objects.get(pk=pk)
+        loan_fees_meta = get_object_or_404(LoanFeesMeta, pk=pk)
         loan_fees_meta.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -360,9 +438,19 @@ class LoanProductView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class LoanProductChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = LoanProductSerializer
+
+    @swagger_auto_schema(responses={200: LoanProductSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        loan_products = get_object_or_404(LoanProduct, pk=pk)
+        serializer = LoanProductSerializer(loan_products)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(request_body=LoanProductSerializer)
     def put(self, request, pk, format=None, *args, **kwargs):
-        loan_products = LoanProduct.objects.get(pk=pk)
+        loan_products = get_object_or_404(LoanProduct, pk=pk)
         serializer = LoanProductSerializer(loan_products, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -370,11 +458,9 @@ class LoanProductView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=LoanProductSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        loan_products = LoanProduct.objects.get(pk=pk)
+        loan_products = get_object_or_404(LoanProduct, pk=pk)
         loan_products.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # Views for LoanRepayments
@@ -397,10 +483,19 @@ class LoanRepaymentsView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    
+class LoanRepaymentsChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = LoanRepaymentsSerializer
+
+    @swagger_auto_schema(responses={200: LoanRepaymentsSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        loan_repayments = get_object_or_404(LoanRepayments, pk=pk)
+        serializer = LoanRepaymentsSerializer(loan_repayments)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(request_body=LoanRepaymentsSerializer)
     def put(self, request, pk, format=None, *args, **kwargs):
-        loan_repayments = LoanRepayments.objects.get(pk=pk)
+        loan_repayments = get_object_or_404(LoanRepayments, pk=pk)
         serializer = LoanRepaymentsSerializer(loan_repayments, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -408,11 +503,9 @@ class LoanRepaymentsView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=LoanRepaymentsSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        loan_repayments = LoanRepayments.objects.get(pk=pk)
+        loan_repayments = get_object_or_404(LoanRepayments, pk=pk)
         loan_repayments.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # Views for LoanRepaymentMethods
@@ -435,22 +528,29 @@ class LoanRepaymentMethodsView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(request_body=LoanRepaymentsSerializer)
+class LoanRepaymentMethodsChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = LoanRepaymentMethodsSerializer
+
+    @swagger_auto_schema(responses={200: LoanRepaymentMethodsSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        loan_repayment_methods = get_object_or_404(LoanRepaymentMethods, pk=pk)
+        serializer = LoanRepaymentMethodsSerializer(loan_repayment_methods)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(request_body=LoanRepaymentMethodsSerializer)
     def put(self, request, pk, format=None, *args, **kwargs):
-        loan_repayments = LoanRepayments.objects.get(pk=pk)
-        serializer = LoanRepaymentsSerializer(loan_repayments, data=request.data)
+        loan_repayment_methods = get_object_or_404(LoanRepaymentMethods, pk=pk)
+        serializer = LoanRepaymentMethodsSerializer(loan_repayment_methods, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=LoanRepaymentsSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        loan_repayments = LoanRepayments.objects.get(pk=pk)
-        loan_repayments.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
+        loan_repayment_methods = get_object_or_404(LoanRepaymentMethods, pk=pk)
+        loan_repayment_methods.delete()
 
 
 # Views for LoanSchedules
@@ -473,10 +573,19 @@ class LoanSchedulesView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+class LoanSchedulesChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = LoanSchedulesSerializer
+
+    @swagger_auto_schema(responses={200: LoanSchedulesSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        loan_schedules = get_object_or_404(LoanSchedules, pk=pk)
+        serializer = LoanSchedulesSerializer(loan_schedules)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(request_body=LoanSchedulesSerializer)
     def put(self, request, pk, format=None, *args, **kwargs):
-        loan_schedules = LoanSchedules.objects.get(pk=pk)
+        loan_schedules = get_object_or_404(LoanSchedules, pk=pk)
         serializer = LoanSchedulesSerializer(loan_schedules, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -484,14 +593,11 @@ class LoanSchedulesView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=LoanSchedulesSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        loan_schedules = LoanSchedules.objects.get(pk=pk)
+        loan_schedules = get_object_or_404(LoanSchedules, pk=pk)
         loan_schedules.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# Views for LoanStatus
 class LoanStatusView(APIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = LoanStatusSerializer
@@ -510,10 +616,21 @@ class LoanStatusView(APIView):
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+class LoanStatusChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = LoanStatusSerializer
+
+    @swagger_auto_schema(responses={200: LoanStatusSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        loan_status = get_object_or_404(LoanStatus, pk=pk)
+        serializer = LoanStatusSerializer(loan_status)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(request_body=LoanStatusSerializer)
     def put(self, request, pk, format=None, *args, **kwargs):
-        loan_status = LoanStatus.objects.get(pk=pk)
+        loan_status = get_object_or_404(LoanStatus, pk=pk)
         serializer = LoanStatusSerializer(loan_status, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -521,12 +638,10 @@ class LoanStatusView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=LoanStatusSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        loan_status = LoanStatus.objects.get(pk=pk)
+        loan_status = get_object_or_404(LoanStatus, pk=pk)
         loan_status.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 # Views for Savings
 class SavingsView(APIView):
@@ -548,9 +663,19 @@ class SavingsView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+class SavingsChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = SavingsSerializer
+
+    @swagger_auto_schema(responses={200: SavingsSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        savings = get_object_or_404(Savings, pk=pk)
+        serializer = SavingsSerializer(savings)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(request_body=SavingsSerializer)
     def put(self, request, pk, format=None, *args, **kwargs):
-        savings = Savings.objects.get(pk=pk)
+        savings = get_object_or_404(Savings, pk=pk)
         serializer = SavingsSerializer(savings, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -558,11 +683,9 @@ class SavingsView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=SavingsSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        savings = Savings.objects.get(pk=pk)
+        savings = get_object_or_404(Savings, pk=pk)
         savings.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # Views for SavingFees
@@ -585,22 +708,30 @@ class SavingFeesView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class SavingFeesChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = SavingFeesSerializer
+
+    @swagger_auto_schema(responses={200: SavingFeesSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        saving_fees = get_object_or_404(SavingFees, pk=pk)
+        serializer = SavingFeesSerializer(saving_fees)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(request_body=SavingFeesSerializer)
     def put(self, request, pk, format=None, *args, **kwargs):
-        savingFees = SavingFees.objects.get(pk=pk)
-        serializer = SavingFeesSerializer(savingFees, data=request.data)
+        saving_fees = get_object_or_404(SavingFees, pk=pk)
+        serializer = SavingFeesSerializer(saving_fees, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=SavingFeesSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        savingFees = SavingFees.objects.get(pk=pk)
-        savingFees.delete()
+        saving_fees = get_object_or_404(SavingFees, pk=pk)
+        saving_fees.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 
 # Views for SavingsProducts
@@ -623,20 +754,29 @@ class SavingsProductsView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+class SavingsProductsChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = SavingsProductsSerializer
+
+    @swagger_auto_schema(responses={200: SavingsProductsSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        savings_products = get_object_or_404(SavingsProducts, pk=pk)
+        serializer = SavingsProductsSerializer(savings_products)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(request_body=SavingsProductsSerializer)
     def put(self, request, pk, format=None, *args, **kwargs):
-        savingsProducts = savingsProducts.objects.get(pk=pk)
-        serializer = SavingsProductsSerializer(SavingsProducts, data=request.data)
+        savings_products = get_object_or_404(SavingsProducts, pk=pk)
+        serializer = SavingsProductsSerializer(savings_products, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=SavingsProductsSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        savingsProducts = SavingsProducts.objects.get(pk=pk)
-        savingsProducts.delete()
+        savings_products = get_object_or_404(SavingsProducts, pk=pk)
+        savings_products.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -660,9 +800,19 @@ class SavingsTransactionsView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+class SavingsTransactionsChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = SavingsTransactionsSerializer
+
+    @swagger_auto_schema(responses={200: SavingsTransactionsSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        savings_transactions = get_object_or_404(SavingsTransactions, pk=pk)
+        serializer = SavingsTransactionsSerializer(savings_transactions)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(request_body=SavingsTransactionsSerializer)
-    def put(self, request, pk,format=None, *args, **kwargs):
-        savings_transactions  = SavingsTransactions.objects.get(pk=pk)
+    def put(self, request, pk, format=None, *args, **kwargs):
+        savings_transactions = get_object_or_404(SavingsTransactions, pk=pk)
         serializer = SavingsTransactionsSerializer(savings_transactions, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -670,9 +820,8 @@ class SavingsTransactionsView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=SavingsTransactionsSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        savings_transactions= SavingsTransactions.objects.get(pk=pk)
+        savings_transactions = get_object_or_404(SavingsTransactions, pk=pk)
         savings_transactions.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -697,9 +846,19 @@ class LoanRegisterView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class LoanRegisterChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = LoanRegisterSerializer
+
+    @swagger_auto_schema(responses={200: LoanRegisterSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        loan_register = get_object_or_404(LoanRegister, pk=pk)
+        serializer = LoanRegisterSerializer(loan_register)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(request_body=LoanRegisterSerializer)
-    def put(self, request, pk,format=None, *args, **kwargs):
-        loan_register = LoanRegister.objects.get(pk=pk)
+    def put(self, request, pk, format=None, *args, **kwargs):
+        loan_register = get_object_or_404(LoanRegister, pk=pk)
         serializer = LoanRegisterSerializer(loan_register, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -707,9 +866,8 @@ class LoanRegisterView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=LoanRegisterSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        loan_register= LoanRegister.objects.get(pk=pk)
+        loan_register = get_object_or_404(LoanRegister, pk=pk)
         loan_register.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -734,9 +892,19 @@ class LoanInsRegisterView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+class LoanInsRegisterChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = LoanInsRegisterSerializer
+
+    @swagger_auto_schema(responses={200: LoanInsRegisterSerializer})
+    def get(self, request,pk, format=None, *args, **kwargs):
+        loan_ins_register = get_object_or_404(LoanInsRegister, pk=pk)
+        serializer = LoanInsRegisterSerializer(loan_ins_register)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(request_body=LoanInsRegisterSerializer)
-    def put(self, request, pk,format=None, *args, **kwargs):
-        loan_ins_register = LoanInsRegister.objects.get(pk=pk)
+    def put(self, request, pk, format=None, *args, **kwargs):
+        loan_ins_register = get_object_or_404(LoanInsRegister, pk=pk)
         serializer = LoanInsRegisterSerializer(loan_ins_register, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -744,9 +912,8 @@ class LoanInsRegisterView(APIView):
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    @swagger_auto_schema(request_body=LoanInsRegisterSerializer)
     def delete(self, request, pk, format=None, *args, **kwargs):
-        loan_ins_register= LoanInsRegister.objects.get(pk=pk)
+        loan_ins_register = get_object_or_404(LoanInsRegister, pk=pk)
         loan_ins_register.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
