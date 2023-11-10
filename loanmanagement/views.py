@@ -16,29 +16,6 @@ LoanDisbursedBy,LoanFees,LoanFeesMeta,LoanProduct,LoanRepayments,LoanRepaymentMe
 LoanSchedules,LoanStatus,Savings,SavingFees,SavingsProducts,SavingsTransactions,
 LoanRegister,LoanInsRegister
 
-from .serializers import (
-Borrowers,
-CostomField,
-Loans,
-LoanApplication,
-LoanComment,
-LoanDisbursedBy,
-LoanFees,
-LoanFeesMeta,
-LoanProduct,
-LoanRepayments,
-LoanRepaymentMethods,
-LoanSchedules,
-LoanStatus,
-Savings,
-SavingFees,
-SavingsProducts,
-SavingsTransactions,
-LoanRegister,
-LoanInsRegister
-
-
-   )
 
 from drf_yasg.utils import swagger_auto_schema
 

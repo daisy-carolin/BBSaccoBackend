@@ -1,5 +1,5 @@
 from django.db import models
-from useraccount.models.users import User
+from useraccount.users import User
 class Branch(models.Model):
     name = models.CharField(max_length=50,unique=True,null=False,blank=False)
     notes = models.TextField(null=True,blank=True)

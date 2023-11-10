@@ -1,6 +1,6 @@
 from django.db  import models
-from useraccount.models.users import User
-class Borrowers(models.Model):
+from useraccount.users import User
+class Borrowers1(models.Model):
     # user_id=models.CharField(max_length=3,primary_key=True,blank=False,null=False)
     first_name=models.CharField(max_length=30)
     last_name=models.CharField(max_length=30)
