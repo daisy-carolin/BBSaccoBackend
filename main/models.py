@@ -84,7 +84,7 @@ class GroupAaccounts(models.Model):
     def _str_(self):
         return self.ga_id
 
-class loanType(models.Model):
+class LoanType(models.Model):
     lt_id=models.CharField(max_length=3,primary_key=True,null=False,blank=False)
     lt_tuype=models.CharField(max_length=100)
     AMT_TYPE_CHOICES=(
@@ -266,6 +266,7 @@ class GLEntries(models.Model):
     gle_approved_time=models.TimeField()
     def _str_(self):
         return self.gle_id
+    
 class GAcManager(models.Model):
     gacm_id=models.CharField(max_length=3,primary_key=True,null=False,blank=False)
     gamc_fname=models.CharField(max_length=50)
@@ -330,7 +331,7 @@ class MemberRegister(models.Model):
     mr_email_alert=models.CharField(max_length=10,choices=EMAIL_ALERT_CHOICES)
     def _str_(self):
         return self.mr_id
-class LoanRegister(models.Model):
+class LoanRegisterAPI(models.Model):
     lr_id=models.CharField(max_length=3,primary_key=True,null=False,blank=False)
     lr_type=models.CharField(max_length=30)
     lr_member_name=models.CharField(max_length=50)
@@ -363,9 +364,9 @@ class LoanRegister(models.Model):
     def _str_(self):
         return self.lr_id
 
-class LoanInsRegister(models.Model):
+class LoanInsRegisterAPI(models.Model):
     lir_id=models.CharField(max_length=3,primary_key=True,null=False,blank=False)
-    lir_reference=models.ForeignKey(LoanRegister,on_delete=models.CASCADE)
+    lir_reference=models.ForeignKey(LoanRegisterAPI,on_delete=models.CASCADE)
     lir_desc=models.CharField(max_length=100)
     lir_invoice_date=models.DateField()
     lir_due_date=models.DateField()
@@ -481,7 +482,7 @@ class Transactions(models.Model):
         ('Loan fine Deferment','Loan fine Deferment'),
     )
     t_fine_type=models.CharField(max_length=50,choices=FINE_TYPE_CHOICES)
-    t_loan=models.ForeignKey(LoanRegister,on_delete=models.CASCADE)
+    t_loan=models.ForeignKey(LoanRegisterAPI,on_delete=models.CASCADE)
 
 class Ac_Transfer(models.Model):
     ata_id=models.CharField(max_length=3,primary_key=True)
